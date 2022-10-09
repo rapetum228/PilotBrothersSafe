@@ -15,11 +15,10 @@ namespace PilotBrothersSafe.Models
     {
         private Toggle[,] _toggles;
 
-        private int _commonHorizontalAngle = 0;
-        private int _commonVerticalAngle;
-        private int _currentSumAngles = 0;
+        //private int _commonHorizontalAngle = 0;
+        //private int _commonVerticalAngle;
+        //private int _currentSumAngles = 0;
 
-        private IDataProvider _gameOver;
         private DelegateCommand LeftButtonClickCommand { get; }
 
         public ToggleFieldLogic()
@@ -27,17 +26,13 @@ namespace PilotBrothersSafe.Models
             LeftButtonClickCommand = new DelegateCommand(LeftButtonClick);
         }
 
-        public int LenghtOnOneSide { get; set; }
+        public IDataProvider DataProvider { get; set; }
 
         internal void AttachToggles(Toggle[,] toggles)
         {
-            _commonVerticalAngle = 0;
-            _currentSumAngles = 0;
             toggles.ForEach(
                 (toggle, x, y) =>
                 {
-                    _commonVerticalAngle += (int)ToggleState.Vertical;
-                    _currentSumAngles += (int)(toggle.CurrentToggleState);
                     var info = new ToggleInfo(x, y, toggle);
                     toggle.Tag = info;
                     toggle.InputBindings.Add(
@@ -57,33 +52,34 @@ namespace PilotBrothersSafe.Models
             int y = info.Y;
 
             ChangeStateByXY(x, y);
-            if (_currentSumAngles == _commonHorizontalAngle || _currentSumAngles == _commonVerticalAngle)
+            DataProvider.MoveToggle();
+            if (DataProvider.CurrentSumAngles == DataProvider.SumAnglesInVertical 
+                || DataProvider.CurrentSumAngles == DataProvider.SumAnglesInHorizontal)
             {
-                MessageBox.Show($"{_currentSumAngles} - это победа");
-                _gameOver.GameoverEvent();
+                DataProvider.GameOnOver(true, DataProvider.NumberOnMoves);
             }
         }
 
         private void ChangeStateByXY(int x, int y)
         {
-            if (LenghtOnOneSide == 0)
+            if (DataProvider.LenghtOnOneSide == 0)
             {
                 return;
             }
-            for (int i = 0; i < LenghtOnOneSide; i++)
+            for (int i = 0; i < DataProvider.LenghtOnOneSide; i++)
             {
-                _currentSumAngles += _toggles[x, i].ChangeState();
-                _currentSumAngles += _toggles[i, y].ChangeState();
+                DataProvider.RefreshCurrentSumOfAngles(_toggles[x, i].ChangeState());
+                DataProvider.RefreshCurrentSumOfAngles(_toggles[i, y].ChangeState());
 
             }
-            _currentSumAngles += _toggles[x, y].ChangeState();
+            DataProvider.RefreshCurrentSumOfAngles(_toggles[x, y].ChangeState());
         }
 
         public void RandomMixStates()
         {
             var random = new Random();
-            int x = random.Next(LenghtOnOneSide);
-            int y = random.Next(LenghtOnOneSide);
+            int x = random.Next(DataProvider.LenghtOnOneSide);
+            int y = random.Next(DataProvider.LenghtOnOneSide);
             ChangeStateByXY(x, y);
         }
 

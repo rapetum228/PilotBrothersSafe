@@ -54,7 +54,7 @@
                     ClipToBounds="True"
                     Visibility="{Binding VisibilityBox}">
 
-                <controls:ToggleField LenghtOnOneSide="{Binding LenghtOnOneSide}" 
+                <controls:ToggleField DataProvider ="{Binding DataProvider}" 
                                       Background="#FFC5C3C3" 
                                       HorizontalAlignment="Center" 
                                       VerticalAlignment="Center"/>

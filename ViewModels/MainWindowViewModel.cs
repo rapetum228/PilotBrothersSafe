@@ -14,19 +14,19 @@ namespace PilotBrothersSafe.ViewModels
 {
     public class MainWindowViewModel : Notifier
     {
-        private IDataProvider _gameOver;
-        private int _togglesOnOneSide;
-        public int LenghtOnOneSide
+
+        private IDataProvider _dataProvider;
+        public IDataProvider DataProvider
         {
             get
             {
-                return _togglesOnOneSide;
+                return _dataProvider;
             }
 
             private set
             {
-                _togglesOnOneSide = value;
-                OnPropertyChanged(nameof(LenghtOnOneSide));
+                _dataProvider = value;
+                OnPropertyChanged(nameof(DataProvider));
             }
         }
 
@@ -53,7 +53,7 @@ namespace PilotBrothersSafe.ViewModels
 
         private void CreateNewField()
         {
-            if (LenghtOnOneSide != 0)
+            if (DataProvider != null)
             {
                 MessageBoxResult result = MessageBox.Show("Начать сначала?", "OK", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.No)
@@ -61,8 +61,10 @@ namespace PilotBrothersSafe.ViewModels
                     return;
                 }
             }
-            LenghtOnOneSide = 0;
-            LenghtOnOneSide = _sizeField;
+            
+            DataProvider = new DataProvider(SizeField);
+            MarginCap = new Thickness(0, 0, 0, 0);
+            DataProvider.Gameover += OnGameover;
             VisibilityBox = Visibility.Visible;
 
         }
@@ -88,6 +90,16 @@ namespace PilotBrothersSafe.ViewModels
                 _visibilityBox = value;
                 OnPropertyChanged(nameof(VisibilityBox));
             }
+        }
+
+        private void OnGameover(object sender, GameArgs gameArgs)
+        {
+            if (gameArgs.IsWin)
+            {
+                MessageBox.Show($"Победа! Вы совершили {gameArgs.NumberOfMoves} ходов");
+                MarginCap = new Thickness(0, 0, 0, 30);
+            }
+            DataProvider.Gameover -= OnGameover;
         }
     }
 }

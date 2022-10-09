@@ -26,22 +26,22 @@ namespace PilotBrothersSafe.Controls
 
         private Random _random = new Random();
 
-        public static readonly DependencyProperty LenghtOnOneSideProperty;
+        public static readonly DependencyProperty DataProviderProperty;
 
 
         static ToggleField()
         {
-            LenghtOnOneSideProperty = DependencyProperty.Register(
-                nameof(LenghtOnOneSide),
-                typeof(int),
+            DataProviderProperty = DependencyProperty.Register(
+                nameof(DataProvider),
+                typeof(IDataProvider),
                 typeof(ToggleField),
                 new PropertyMetadata(
                     (sourceObject, args) =>
                     {
                         var mineField = sourceObject as ToggleField;
                         mineField?.CellDataProviderChanged(
-                            (int)args.OldValue,
-                            (int)args.NewValue);
+                            (IDataProvider)args.OldValue,
+                            (IDataProvider)args.NewValue);
                     }));
         }
 
@@ -52,30 +52,30 @@ namespace PilotBrothersSafe.Controls
 
 
 
-        public int LenghtOnOneSide
+        public IDataProvider DataProvider
         {
             get
             {
-                return (int)GetValue(LenghtOnOneSideProperty);
+                return (IDataProvider)GetValue(DataProviderProperty);
             }
             set
             {
-                SetValue(LenghtOnOneSideProperty, value);
+                SetValue(DataProviderProperty, value);
             }
         }
 
-        private void CellDataProviderChanged(int oldProvider, int newProvider)
+        private void CellDataProviderChanged(IDataProvider oldProvider, IDataProvider newProvider)
         {
             RemoveUnactualField(oldProvider);
-            _toggleFieldLogic.LenghtOnOneSide = newProvider;
+            _toggleFieldLogic.DataProvider = newProvider;
             DrawNewField();
             _toggleFieldLogic.RandomMixStates();
             _toggleFieldLogic.RandomMixStates();
         }
 
-        private void RemoveUnactualField(int oldData)
+        private void RemoveUnactualField(IDataProvider oldData)
         {
-            if (oldData == 0)
+            if (oldData == null)
             {
                 return;
             }
@@ -97,24 +97,25 @@ namespace PilotBrothersSafe.Controls
 
         private void DrawNewField()
         {
-            _toggles = new Toggle[LenghtOnOneSide, LenghtOnOneSide];
+            var provider = DataProvider;
+            _toggles = new Toggle[provider.LenghtOnOneSide, provider.LenghtOnOneSide];
             var state = ToggleStates[_random.Next(ToggleStates.Length)];
 
-            for (int i = 0; i < LenghtOnOneSide; i++)
+            for (int i = 0; i < provider.LenghtOnOneSide; i++)
             {
                 var definition = new RowDefinition() { Height = new GridLength(DefaultCellSize * 2) };
                 RowDefinitions.Add(definition);
             }
 
-            for (int j = 0; j < LenghtOnOneSide; j++)
+            for (int j = 0; j < provider.LenghtOnOneSide; j++)
             {
                 var definition = new ColumnDefinition() { Width = new GridLength(DefaultCellSize * 2) };
                 ColumnDefinitions.Add(definition);
             }
 
-            for (int i = 0; i < LenghtOnOneSide; i++)
+            for (int i = 0; i < provider.LenghtOnOneSide; i++)
             {
-                for (int j = 0; j < LenghtOnOneSide; j++)
+                for (int j = 0; j < provider.LenghtOnOneSide; j++)
                 {
                     var toggle = new Toggle(state) { Width = DefaultCellSize, Height = DefaultCellSize };
                     Children.Add(toggle);
@@ -124,7 +125,7 @@ namespace PilotBrothersSafe.Controls
                     _toggles[i, j] = toggle;
                 }
             }
-
+            provider.ResetCounter(state);
             _toggleFieldLogic.AttachToggles(_toggles);
             
         }
