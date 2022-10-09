@@ -1,4 +1,5 @@
 ﻿using PilotBrothersSafe.Common;
+using PilotBrothersSafe.Helpers;
 using PilotBrothersSafe.Models;
 using System;
 using System.Windows;
@@ -22,6 +23,7 @@ namespace PilotBrothersSafe.ViewModels
             MarginCap = new Thickness(0, 0, 0, 0);
             BoxIsEnabled = false;
             NewGameCommand = new DelegateCommand(p => NewGame());
+            HelpCommand = new DelegateCommand(p => Help());
         }
 
         public IDataProvider DataProvider
@@ -83,6 +85,7 @@ namespace PilotBrothersSafe.ViewModels
             }
         }
         public DelegateCommand NewGameCommand { get; private set; }
+        public DelegateCommand HelpCommand { get; private set; }
         private void NewGame()
         {
             if (!ValidationText())
@@ -91,7 +94,7 @@ namespace PilotBrothersSafe.ViewModels
             }
             if (DataProvider != null)
             {
-                MessageBoxResult result = MessageBox.Show("Начать сначала?", "OK", MessageBoxButton.YesNo);
+                MessageBoxResult result = MessageBox.Show(TextHelper.GetAskForRestart(), "Предупреждение", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.No)
                 {
                     return;
@@ -106,11 +109,16 @@ namespace PilotBrothersSafe.ViewModels
 
         }
 
+        private void Help()
+        {
+            MessageBox.Show(TextHelper.GetHelpMessage());
+        }
+
         private bool ValidationText()
         {
-            if (SizeField < 2)
+            if (SizeField < 2 || SizeField > 15)
             {
-                MessageBoxResult result = MessageBox.Show("Число должно быть не меньше 2-ух","Внимание", MessageBoxButton.OK);
+                MessageBoxResult result = MessageBox.Show(TextHelper.GetValidationMessage(), "Внимание", MessageBoxButton.OK);
                 return false;
             }
             return true;
@@ -118,7 +126,7 @@ namespace PilotBrothersSafe.ViewModels
 
         private void OnGameover(object sender, GameArgs gameArgs)
         {
-            MessageBox.Show($"Победа! Вы совершили {gameArgs.NumberOfMoves} ходов.");
+            MessageBox.Show(TextHelper.GetWinMessage(gameArgs.NumberOfMoves));
             MarginCap = new Thickness(0, 0, 0, 30);
             DataProvider.Gameover -= OnGameover;
             BoxIsEnabled = false;
