@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PilotBrothersSafe.Models
 {
@@ -25,9 +21,9 @@ namespace PilotBrothersSafe.Models
 
         public event EventHandler<GameArgs> Gameover;
 
-        public void GameOnOver(bool isWin, int counter)
+        public void GameOnOver()
         {
-            Gameover?.Invoke(this, new GameArgs(isWin, counter));
+            Gameover?.Invoke(this, new GameArgs(NumberOnMoves));
         }
 
         public void MoveToggle()
@@ -42,7 +38,7 @@ namespace PilotBrothersSafe.Models
 
         public void ResetCounter(ToggleState state)
         {
-            CurrentSumAngles = (int) state * LenghtOnOneSide * LenghtOnOneSide;
+            CurrentSumAngles = (int)state * LenghtOnOneSide * LenghtOnOneSide;
             NumberOnMoves = 0;
         }
     }

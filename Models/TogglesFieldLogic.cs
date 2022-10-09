@@ -1,12 +1,6 @@
 ﻿using PilotBrothersSafe.Common;
 using PilotBrothersSafe.Controls;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Automation;
 using System.Windows.Input;
 
 namespace PilotBrothersSafe.Models
@@ -14,11 +8,6 @@ namespace PilotBrothersSafe.Models
     public class ToggleFieldLogic
     {
         private Toggle[,] _toggles;
-
-        //private int _commonHorizontalAngle = 0;
-        //private int _commonVerticalAngle;
-        //private int _currentSumAngles = 0;
-
         private DelegateCommand LeftButtonClickCommand { get; }
 
         public ToggleFieldLogic()
@@ -53,10 +42,10 @@ namespace PilotBrothersSafe.Models
 
             ChangeStateByXY(x, y);
             DataProvider.MoveToggle();
-            if (DataProvider.CurrentSumAngles == DataProvider.SumAnglesInVertical 
+            if (DataProvider.CurrentSumAngles == DataProvider.SumAnglesInVertical
                 || DataProvider.CurrentSumAngles == DataProvider.SumAnglesInHorizontal)
             {
-                DataProvider.GameOnOver(true, DataProvider.NumberOnMoves);
+                DataProvider.GameOnOver();
             }
         }
 

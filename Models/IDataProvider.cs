@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PilotBrothersSafe.Models
 {
@@ -15,7 +11,7 @@ namespace PilotBrothersSafe.Models
         int CurrentSumAngles { get; }
         int NumberOnMoves { get; }
         void MoveToggle();
-        void GameOnOver(bool isWin, int counter);
+        void GameOnOver();
         void ResetCounter(ToggleState state);
         void RefreshCurrentSumOfAngles(int angle);
 

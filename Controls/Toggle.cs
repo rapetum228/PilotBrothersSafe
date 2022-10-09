@@ -1,31 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Automation;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 using System.Windows;
-using PilotBrothersSafe.Models;
-using ToggleState = PilotBrothersSafe.Models.ToggleState;
+using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using ToggleState = PilotBrothersSafe.Models.ToggleState;
 
 namespace PilotBrothersSafe.Controls
 {
     public class Toggle : ContentControl
     {
         private const int ToggleImageSize = 20;
-
-        
+        private const string PathToImage = "../Images/toggle.png";
 
         public static readonly DependencyProperty CurrentToggleStateProperty =
             DependencyProperty.Register(
                 nameof(CurrentToggleState),
                 typeof(ToggleState),
                 typeof(Toggle),
-                new PropertyMetadata(ToggleState.Horizontal, CellTypeChanged));
+                new PropertyMetadata(ToggleState.Horizontal, ToggleStateChanged));
         public Toggle(ToggleState stateInit)
         {
             DataContext = this;
@@ -44,14 +36,8 @@ namespace PilotBrothersSafe.Controls
                 SetValue(CurrentToggleStateProperty, value);
             }
         }
-        protected override void OnInitialized(EventArgs e)
-        {
-            base.OnInitialized(e);
-            SetToggleImage();
 
-        }
-
-        private static void CellTypeChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
+        private static void ToggleStateChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs args)
         {
             if (args.OldValue != args.NewValue)
             {
@@ -66,23 +52,29 @@ namespace PilotBrothersSafe.Controls
 
         private Image GetImage()
         {
-            BitmapImage bi3 = new BitmapImage();
-            bi3.BeginInit();
-            bi3.UriSource = new Uri("../Images/toggle.png", UriKind.Relative);
-            bi3.EndInit();
+            BitmapImage bi = new BitmapImage();
+            bi.BeginInit();
+            bi.UriSource = new Uri(PathToImage, UriKind.Relative);
+            bi.EndInit();
 
             int angle = (int)CurrentToggleState;
             RotateTransform rotateTransform = new RotateTransform(angle);
-            rotateTransform.CenterX = ToggleImageSize/2;
-            rotateTransform.CenterY = ToggleImageSize/2;
+            rotateTransform.CenterX = ToggleImageSize / 2;
+            rotateTransform.CenterY = ToggleImageSize / 2;
 
             return new Image
             {
-                Source = bi3,
+                Source = bi,
                 Width = ToggleImageSize,
                 Height = ToggleImageSize,
                 RenderTransform = rotateTransform,
             };
+        }
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+            SetToggleImage();
+
         }
 
         public int ChangeState()

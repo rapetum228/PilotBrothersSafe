@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using System.Windows;
+﻿using PilotBrothersSafe.Common;
 using PilotBrothersSafe.Models;
-using System.Windows.Automation;
+using System;
+using System.Windows;
+using System.Windows.Controls;
 using ToggleState = PilotBrothersSafe.Models.ToggleState;
-using PilotBrothersSafe.Common;
 
 namespace PilotBrothersSafe.Controls
 {
@@ -26,12 +19,7 @@ namespace PilotBrothersSafe.Controls
 
         private Random _random = new Random();
 
-        public static readonly DependencyProperty DataProviderProperty;
-
-
-        static ToggleField()
-        {
-            DataProviderProperty = DependencyProperty.Register(
+        public static readonly DependencyProperty DataProviderProperty = DependencyProperty.Register(
                 nameof(DataProvider),
                 typeof(IDataProvider),
                 typeof(ToggleField),
@@ -43,14 +31,6 @@ namespace PilotBrothersSafe.Controls
                             (IDataProvider)args.OldValue,
                             (IDataProvider)args.NewValue);
                     }));
-        }
-
-        public ToggleField()
-        {
-
-        }
-
-
 
         public IDataProvider DataProvider
         {
@@ -127,7 +107,7 @@ namespace PilotBrothersSafe.Controls
             }
             provider.ResetCounter(state);
             _toggleFieldLogic.AttachToggles(_toggles);
-            
+
         }
     }
 }

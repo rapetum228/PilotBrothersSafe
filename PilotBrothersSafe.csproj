@@ -8,18 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\box.png" />
-    <None Remove="Images\case.png" />
     <None Remove="Images\toggle.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\box.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\case.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Images\toggle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
