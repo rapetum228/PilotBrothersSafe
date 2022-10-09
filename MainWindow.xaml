@@ -7,7 +7,9 @@
         xmlns:viewModels="clr-namespace:PilotBrothersSafe.ViewModels"
         xmlns:controls="clr-namespace:PilotBrothersSafe.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="Auto" Width="Auto">
+        Icon="/Images/safeIcon.ico"
+        Title="Сейф братьев пилотов" Height="Auto" Width="Auto">
+    
     <Window.DataContext>
         <viewModels:MainWindowViewModel/>
     </Window.DataContext>
@@ -48,6 +50,7 @@
                      Margin="{Binding MarginCap}">
                 <Label  Background="#FFC5C3C3" />
             </Border>
+            
             <Border 
                     BorderBrush="Black" 
                     BorderThickness="3,3,3,3" 

@@ -8,7 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\safeIcon.ico" />
     <None Remove="Images\toggle.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\safeIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

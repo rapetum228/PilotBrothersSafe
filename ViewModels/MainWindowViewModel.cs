@@ -1,6 +1,8 @@
 ﻿using PilotBrothersSafe.Common;
 using PilotBrothersSafe.Models;
+using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PilotBrothersSafe.ViewModels
 {
@@ -12,7 +14,8 @@ namespace PilotBrothersSafe.ViewModels
         private Thickness _marginCap;
         private Visibility _visibilityBox;
         private bool _boxIsEnabled;
-        
+        private bool _startbuttonIsEnabled;
+
         public MainWindowViewModel()
         {
             VisibilityBox = Visibility.Collapsed;
@@ -70,10 +73,22 @@ namespace PilotBrothersSafe.ViewModels
                 OnPropertyChanged(nameof(BoxIsEnabled));
             }
         }
+        public bool StartButtonIsEnabled
+        {
+            get => _startbuttonIsEnabled;
+            set
+            {
+                _startbuttonIsEnabled = value;
+                OnPropertyChanged(nameof(StartButtonIsEnabled));
+            }
+        }
         public DelegateCommand NewGameCommand { get; private set; }
-
         private void NewGame()
         {
+            if (!ValidationText())
+            {
+                return;
+            }
             if (DataProvider != null)
             {
                 MessageBoxResult result = MessageBox.Show("Начать сначала?", "OK", MessageBoxButton.YesNo);
@@ -91,9 +106,19 @@ namespace PilotBrothersSafe.ViewModels
 
         }
 
+        private bool ValidationText()
+        {
+            if (SizeField < 2)
+            {
+                MessageBoxResult result = MessageBox.Show("Число должно быть не меньше 2-ух","Внимание", MessageBoxButton.OK);
+                return false;
+            }
+            return true;
+        }
+
         private void OnGameover(object sender, GameArgs gameArgs)
         {
-            MessageBox.Show($"Победа! Вы совершили {gameArgs.NumberOfMoves} ходов");
+            MessageBox.Show($"Победа! Вы совершили {gameArgs.NumberOfMoves} ходов.");
             MarginCap = new Thickness(0, 0, 0, 30);
             DataProvider.Gameover -= OnGameover;
             BoxIsEnabled = false;
