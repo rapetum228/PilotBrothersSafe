@@ -1,9 +1,7 @@
 ﻿using PilotBrothersSafe.Common;
 using PilotBrothersSafe.Helpers;
 using PilotBrothersSafe.Models;
-using System;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace PilotBrothersSafe.ViewModels
 {

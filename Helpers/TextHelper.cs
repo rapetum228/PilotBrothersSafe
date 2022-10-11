@@ -1,13 +1,6 @@
-﻿using PilotBrothersSafe.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PilotBrothersSafe.Helpers
+﻿namespace PilotBrothersSafe.Helpers
 {
-    public static class  TextHelper
+    public static class TextHelper
     {
         public static string GetHelpMessage()
         {

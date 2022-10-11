@@ -4,7 +4,7 @@ namespace PilotBrothersSafe.Models
 {
     public class GameArgs : EventArgs
     {
-        public GameArgs( int numberOfMoves)
+        public GameArgs(int numberOfMoves)
         {
             NumberOfMoves = numberOfMoves;
         }
